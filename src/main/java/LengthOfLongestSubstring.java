@@ -11,10 +11,10 @@
  * <p>
  * 给定 "pwwkew" ，最长子串是 "wke" ，长度是3。请注意答案必须是一个子串，"pwke" 是 子序列  而不是子串。
  */
-public class Solution {
+public class LengthOfLongestSubstring {
     public static void main(String[] args) {
         String s = "doiqh329PHDOPCWENHFQ3RJHF9OPH";
-        int result = new Solution().lengthOfLongestSubstring(s);
+        int result = new LengthOfLongestSubstring().lengthOfLongestSubstring(s);
         System.out.print(result);
     }
 
