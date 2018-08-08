@@ -7,7 +7,7 @@
  * <p>
  * 你可以假设 nums1 和 nums2 均不为空。
  */
-class FindMedianSortedArrays {
+public class FindMedianSortedArrays {
 
     public static void main(String[] args) {
         int[] nums1 = new int[]{1, 3};
@@ -20,8 +20,6 @@ class FindMedianSortedArrays {
     }
 
     private double findMedianSortedArrays(int[] nums1, int[] nums2) {
-
-
 
 
         return 0.0D;
