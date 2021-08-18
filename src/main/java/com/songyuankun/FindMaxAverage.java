@@ -1,9 +1,5 @@
 package com.songyuankun;
 
-/**
- * todo
- * https://leetcode-cn.com/problems/jJ0w9p/
- */
 public class FindMaxAverage {
     public static void main(String[] args) {
         //46339
