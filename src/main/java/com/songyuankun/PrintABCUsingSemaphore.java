@@ -1,4 +1,4 @@
-package convention;
+package com.songyuankun;
 
 import java.util.concurrent.Semaphore;
 
