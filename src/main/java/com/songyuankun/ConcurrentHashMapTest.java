@@ -9,7 +9,7 @@ public class ConcurrentHashMapTest {
         for (int i = 0; i < 3000; i++) {
             integerIntegerHashMap.put(String.valueOf(i), i);
         }
-
+        integerIntegerHashMap.get(3);
     }
 
 }

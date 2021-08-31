@@ -11,6 +11,8 @@ public class HashMapTest {
             hashMap.put(String.valueOf(i), i);
         }
 
+        hashMap.get(3);
+
     }
 
 }
