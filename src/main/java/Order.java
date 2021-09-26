@@ -1,9 +1,11 @@
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Order implements Serializable,Cloneable {
+public class Order implements Serializable {
+    public Order() {
+    }
+
     public Order(String owner, Date createTime, List<Product> products) {
         this.owner = owner;
         this.createTime = createTime;
@@ -79,15 +81,4 @@ public class Order implements Serializable,Cloneable {
         this.mailAddr = mailAddr;
     }
 
-    @Override
-    protected Order clone() throws CloneNotSupportedException {
-        Order order = (Order) super.clone();
-        ArrayList<Product> pruducts = new ArrayList<>();
-        for (Product pruduct :
-                this.getPruducts()) {
-            pruducts.add(pruduct.clone());
-        }
-        order.setPruducts(pruducts);
-        return order;
-    }
 }

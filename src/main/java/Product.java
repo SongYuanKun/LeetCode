@@ -1,7 +1,10 @@
 import java.io.Serializable;
 import java.util.Locale;
 
-public class Product implements Serializable,Cloneable  {
+public class Product implements Serializable {
+    public Product() {
+    }
+
     public Product(String name, float price, float weight, float volumn) {
         this.name = name;
         this.price = price;
@@ -52,8 +55,4 @@ public class Product implements Serializable,Cloneable  {
                 this.name, this.price, this.weight, this.volumn);
     }
 
-    @Override
-    protected Product clone() throws CloneNotSupportedException {
-        return (Product) super.clone();
-    }
 }

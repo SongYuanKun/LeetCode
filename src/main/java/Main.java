@@ -1,12 +1,13 @@
-import com.google.gson.Gson;
-
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws Exception {
         List<Product> products = new ArrayList<Product>();
         products.add(new Product("A", 200.0f, 5.0f, 20.0f));
         products.add(new Product("B", 300.0f, 6.0f, 25.0f));
@@ -34,21 +35,62 @@ public class Main {
     }
 
     // TODO: 这里实现深拷贝实现方法
-    public static <T> T deepClone(T obj) throws IOException, ClassNotFoundException {
-        //序列化
-        Gson gson = new Gson();
-        String s = gson.toJson(obj);
-        return (T) gson.fromJson(s, Class.forName(obj.getClass().getName()));
+    public static <T> T deepClone(T obj) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+//        序列化
+//        Gson gson = new Gson();
+//        String s = gson.toJson(obj);
+//        return (T) gson.fromJson(s, Class.forName(obj.getClass().getName()));
 
 
-
-        // //文件流
-//        ByteArrayOutputStream bo=new ByteArrayOutputStream();
-//        ObjectOutputStream oo=new ObjectOutputStream(bo);
+        //文件流,需要序列化接口
+//        ByteArrayOutputStream bo = new ByteArrayOutputStream();
+//        ObjectOutputStream oo = new ObjectOutputStream(bo);
 //        oo.writeObject(obj);
-//        ByteArrayInputStream bi=new ByteArrayInputStream(bo.toByteArray());
-//        ObjectInputStream oi=new ObjectInputStream(bi);
+//        ByteArrayInputStream bi = new ByteArrayInputStream(bo.toByteArray());
+//        ObjectInputStream oi = new ObjectInputStream(bi);
 //        return (T) oi.readObject();
 
+
+        //反射方案,需要无参构造
+        Object target = obj.getClass().newInstance();
+        Class sourceClazz = obj.getClass();
+        Class targetClazz = target.getClass();
+        Field[] sourceFields = getAllFields(sourceClazz);
+        Field[] targetFields = getAllFields(targetClazz);
+        for (Field sourceField : sourceFields) {
+            //抑制访问检查
+            sourceField.setAccessible(true);
+            for (Field targetField : targetFields) {
+                if (targetField.getName().equals(sourceField.getName()) && targetField.getType() == sourceField.getType()) {
+                    int mod = targetField.getModifiers();
+                    //静态变量和final变量不进行复制
+                    if (Modifier.isStatic(mod) || Modifier.isFinal(mod)) {
+                        continue;
+                    }
+                    targetField.setAccessible(true);
+                    targetField.set(target, sourceField.get(obj));
+                    break;
+                }
+            }
+        }
+        return (T) target;
     }
+
+    public static Field[] getAllFields(final Class<?> cls) {
+        final List<Field> allFieldsList = getAllFieldsList(cls);
+        return allFieldsList.toArray(new Field[allFieldsList.size()]);
+    }
+
+    public static List<Field> getAllFieldsList(final Class<?> cls) {
+        final List<Field> allFields = new ArrayList<Field>();
+        Class<?> currentClass = cls;
+        while (currentClass != null) {
+            final Field[] declaredFields = currentClass.getDeclaredFields();
+            Collections.addAll(allFields, declaredFields);
+            //也需要获取父类的属性
+            currentClass = currentClass.getSuperclass();
+        }
+        return allFields;
+    }
+
 }
